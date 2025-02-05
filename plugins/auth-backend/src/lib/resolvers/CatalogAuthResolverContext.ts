@@ -162,23 +162,53 @@ export class CatalogAuthResolverContext implements AuthResolverContext {
     return { entity: result };
   }
 
-  async signInWithCatalogUser(query: AuthResolverCatalogUserQuery) {
-    const { entity } = await this.findCatalogUser(query);
-    let ent: string[];
-    if (this.ownershipResolver) {
-      const { ownershipEntityRefs } =
-        await this.ownershipResolver.resolveOwnershipEntityRefs(entity);
-      ent = ownershipEntityRefs;
-    } else {
-      ent = getDefaultOwnershipEntityRefs(entity);
-    }
+  async signInWithCatalogUser(
+    query: AuthResolverCatalogUserQuery,
+    fallbackUserRef?: string | undefined,
+    dangerouslyAllowSignInWithoutUserInCatalog?: boolean | undefined,
+  ) {
+    try {
+      const { entity } = await this.findCatalogUser(query);
 
-    const token = await this.tokenIssuer.issueToken({
-      claims: {
-        sub: stringifyEntityRef(entity),
-        ent,
-      },
-    });
-    return { token };
+      let ent: string[];
+      if (this.ownershipResolver) {
+        const { ownershipEntityRefs } =
+          await this.ownershipResolver.resolveOwnershipEntityRefs(entity);
+        ent = ownershipEntityRefs;
+      } else {
+        ent = getDefaultOwnershipEntityRefs(entity);
+      }
+
+      const token = await this.tokenIssuer.issueToken({
+        claims: {
+          sub: stringifyEntityRef(entity),
+          ent,
+        },
+      });
+      return { token };
+    } catch (error) {
+      if (error?.name !== 'NotFoundError') {
+        throw error;
+      }
+      if (!dangerouslyAllowSignInWithoutUserInCatalog) {
+        throw new Error(
+          'Failed to sign-in, unable to resolve user identity. Please verify that your catalog contains the expected User entities that would match your configured sign-in resolver. For non-production environments, manually provision the user or disable the user provisioning requirement by setting the `dangerouslyAllowSignInWithoutUserInCatalog` option.',
+        );
+      }
+
+      const userEntityRef = stringifyEntityRef({
+        kind: 'User',
+        name: fallbackUserRef ?? 'guest',
+        namespace: DEFAULT_NAMESPACE,
+      });
+
+      const token = await this.tokenIssuer.issueToken({
+        claims: {
+          sub: userEntityRef,
+          ent: [userEntityRef],
+        },
+      });
+      return { token };
+    }
   }
 }

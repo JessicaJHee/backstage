@@ -4921,6 +4921,7 @@ __metadata:
     passport: ^0.7.0
     passport-atlassian-oauth2: ^2.1.0
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -4960,6 +4961,7 @@ __metadata:
     jose: ^5.0.0
     msw: ^2.0.8
     node-cache: ^5.1.2
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -4978,6 +4980,7 @@ __metadata:
     express: ^4.19.2
     jose: ^5.0.0
     passport: ^0.7.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -4996,6 +4999,7 @@ __metadata:
     passport: ^0.7.0
     passport-bitbucket-oauth2: ^0.1.2
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5014,6 +5018,7 @@ __metadata:
     passport: ^0.7.0
     passport-oauth2: ^1.6.1
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5035,6 +5040,7 @@ __metadata:
     msw: ^2.0.0
     node-mocks-http: ^1.0.0
     uuid: ^11.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5050,6 +5056,7 @@ __metadata:
     "@backstage/types": "workspace:^"
     express: ^4.18.2
     google-auth-library: ^9.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5066,6 +5073,7 @@ __metadata:
     "@backstage/types": "workspace:^"
     passport-github2: ^0.1.12
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5084,6 +5092,7 @@ __metadata:
     passport: ^0.7.0
     passport-gitlab2: ^5.0.0
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5101,6 +5110,7 @@ __metadata:
     google-auth-library: ^9.0.0
     passport-google-oauth20: ^2.0.0
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5138,6 +5148,7 @@ __metadata:
     msw: ^1.0.0
     passport-microsoft: ^1.0.0
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5155,6 +5166,7 @@ __metadata:
     passport: ^0.7.0
     passport-oauth2: ^1.6.1
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5168,6 +5180,7 @@ __metadata:
     "@backstage/errors": "workspace:^"
     "@backstage/plugin-auth-node": "workspace:^"
     jose: ^5.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5192,6 +5205,7 @@ __metadata:
     openid-client: ^5.5.0
     passport: ^0.7.0
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5210,6 +5224,7 @@ __metadata:
     express: ^4.18.2
     passport: ^0.7.0
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
@@ -5228,6 +5243,7 @@ __metadata:
     passport: ^0.7.0
     passport-onelogin-oauth: ^0.0.1
     supertest: ^7.0.0
+    zod: ^3.22.4
   languageName: unknown
   linkType: soft
 
