@@ -101,13 +101,22 @@ This is the URL of the targeted server, typically on the form
 `ldaps://ds.example.net` for SSL enabled servers or `ldap://ds.example.net`
 without SSL.
 
-#### target.tls.keys
+### tls
+
+Configure TLS settings in this config block.
+
+#### tls.rejectUnauthorized
+
+Controls whether TLS certificate validation should be enforced during LDAP
+connections. Set to false to allow self-signed certificates.
+
+#### tls.keys
 
 `keys` in TLS options specifies location of a file, that contains private keys
 to establish connection with your LDAP server, in PEM format. See an example
 for Google Secure LDAP Service below.
 
-#### target.tls.certs
+#### tls.certs
 
 `certs` in TLS options specifies location of a file, that contains certificate
 chains to establish connection with your LDAP server, in PEM format. See an
@@ -316,21 +325,6 @@ Allows explicitly defining the name of the attribute that stores each entry's DN
 #### vendor.uuidAttributeName
 
 Allows explicitly defining the name of the attribute that stores each entry's UUID.
-
-#### vendor.dnCaseSensitive
-
-Provides the ability to ignore case sensitivity issues with user/group mappings. If set to true, the ingestion will link user/members to groups whether their `dn`, `member`, or `memberOf` values have the right case or not.
-
-```yaml
-vendor:
-  # Attribute name override for the distinguished name (DN) of an entry.
-  dnAttributeName: dn
-  # Attribute name override for the unique identifier (UUID) of an entry.
-  uuidAttributeName: uuid
-  # Attribute to force values provided from dn and members/memberOf values all to lowercase.
-  # This is to resolve potential user/group mapping issues if case differences on dn strings.
-  dnCaseSensitive: true
-```
 
 ## Customize the Provider
 
