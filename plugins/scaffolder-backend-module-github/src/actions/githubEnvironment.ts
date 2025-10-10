@@ -21,7 +21,9 @@ import {
 } from '@backstage/plugin-scaffolder-node';
 import { ScmIntegrationRegistry } from '@backstage/integration';
 import { getOctokitOptions } from '../util';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
 import Sodium from 'libsodium-wrappers';
 import { examples } from './gitHubEnvironment.examples';
 import { Entity } from '@backstage/catalog-model';
@@ -162,7 +164,7 @@ Wildcard characters will not match \`/\`. For example, to match tags that begin 
         owner,
         repo,
       });
-      const client = new Octokit({
+      const client = new octokit.Octokit({
         ...octokitOptions,
         log: ctx.logger,
       });

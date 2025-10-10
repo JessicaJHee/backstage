@@ -23,7 +23,9 @@ import { ScmIntegrationRegistry } from '@backstage/integration';
 import { examples } from './githubBranchProtection.examples';
 import * as inputProps from './inputProperties';
 import { getOctokitOptions } from '../util';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
 import { enableBranchProtectionOnDefaultRepoBranch } from './gitHelpers';
 
 /**
@@ -94,7 +96,7 @@ export function createGithubBranchProtectionAction(options: {
         owner,
         repo,
       });
-      const client = new Octokit({
+      const client = new octokit.Octokit({
         ...octokitOptions,
         log: ctx.logger,
       });

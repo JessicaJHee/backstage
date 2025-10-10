@@ -15,7 +15,10 @@
  */
 
 import { assertError } from '@backstage/errors';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
+type Octokit = InstanceType<typeof octokit.Octokit>;
 import { LoggerService } from '@backstage/backend-plugin-api';
 
 type BranchProtectionOptions = {

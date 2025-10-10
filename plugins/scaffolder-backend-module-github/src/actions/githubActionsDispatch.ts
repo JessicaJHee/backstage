@@ -23,7 +23,9 @@ import {
   createTemplateAction,
   parseRepoUrl,
 } from '@backstage/plugin-scaffolder-node';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
 import { getOctokitOptions } from '../util';
 import { examples } from './githubActionsDispatch.examples';
 
@@ -101,7 +103,7 @@ export function createGithubActionsDispatchAction(options: {
         credentialsProvider: githubCredentialsProvider,
         token: providedToken,
       });
-      const client = new Octokit({
+      const client = new octokit.Octokit({
         ...octokitOptions,
         log: ctx.logger,
       });

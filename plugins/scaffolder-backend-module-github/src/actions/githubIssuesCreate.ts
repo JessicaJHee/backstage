@@ -23,7 +23,9 @@ import {
   parseRepoUrl,
 } from '@backstage/plugin-scaffolder-node';
 import { assertError, InputError } from '@backstage/errors';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
 import { getOctokitOptions } from '../util';
 import { examples } from './githubIssuesCreate.examples';
 
@@ -126,7 +128,7 @@ export function createGithubIssuesCreateAction(options: {
         token: providedToken,
       });
 
-      const client = new Octokit({
+      const client = new octokit.Octokit({
         ...octokitOptions,
         log: ctx.logger,
       });

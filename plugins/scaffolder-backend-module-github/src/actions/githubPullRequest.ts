@@ -25,7 +25,10 @@ import {
   SerializedFile,
   serializeDirectoryContents,
 } from '@backstage/plugin-scaffolder-node';
-import { Octokit } from '@octokit/core';
+
+const octokit = require('octokit') as typeof import('octokit');
+
+type Octokit = InstanceType<typeof octokit.Octokit>;
 
 import { CustomErrorBase, InputError } from '@backstage/errors';
 import {
@@ -63,7 +66,7 @@ export const defaultClientFactory: CreateGithubPullRequestActionOptions['clientF
       token: providedToken,
     });
 
-    const OctokitPR = Octokit.plugin(createPullRequest);
+    const OctokitPR = octokit.Octokit.plugin(createPullRequest);
     return new OctokitPR({
       ...octokitOptions,
       ...{ throttle: { enabled: false } },

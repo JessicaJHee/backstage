@@ -31,7 +31,7 @@ jest.mock('../util', () => {
   };
 });
 
-import { Octokit } from '@octokit/rest';
+import { Octokit } from 'octokit';
 
 const octokitMock = Octokit as unknown as jest.Mock;
 const mockOctokit = {
@@ -41,7 +41,7 @@ const mockOctokit = {
     },
   },
 };
-jest.mock('@octokit/rest', () => ({
+jest.mock('octokit', () => ({
   Octokit: jest.fn(),
 }));
 

@@ -38,7 +38,7 @@ const mockOctokit = {
   },
 };
 
-jest.mock('@octokit/core', () => ({
+jest.mock('octokit', () => ({
   Octokit: class {
     constructor() {
       return mockOctokit;

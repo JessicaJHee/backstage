@@ -20,7 +20,9 @@ import {
   GithubCredentialsProvider,
   ScmIntegrationRegistry,
 } from '@backstage/integration';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
 import {
   createTemplateAction,
   parseRepoUrl,
@@ -117,7 +119,7 @@ export function createGithubRepoPushAction(options: {
         repo,
       });
 
-      const client = new Octokit({
+      const client = new octokit.Octokit({
         ...octokitOptions,
         log: ctx.logger,
       });

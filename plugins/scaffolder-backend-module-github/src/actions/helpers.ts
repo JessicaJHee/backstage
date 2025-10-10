@@ -16,7 +16,10 @@
 
 import { Config } from '@backstage/config';
 import { assertError, NotFoundError } from '@backstage/errors';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
+type Octokit = InstanceType<typeof octokit.Octokit>;
 
 import {
   getRepoSourceDirectory,

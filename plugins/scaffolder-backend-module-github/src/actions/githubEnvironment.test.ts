@@ -21,7 +21,7 @@ import { ConfigReader } from '@backstage/config';
 import { ScmIntegrations } from '@backstage/integration';
 import { mockCredentials } from '@backstage/backend-test-utils';
 
-import { Octokit } from '@octokit/rest';
+import { Octokit } from 'octokit';
 import { catalogServiceMock } from '@backstage/plugin-catalog-node/testUtils';
 
 const octokitMock = Octokit as unknown as jest.Mock;
@@ -47,7 +47,7 @@ const mockOctokit = {
   },
 };
 
-jest.mock('@octokit/rest', () => ({
+jest.mock('octokit', () => ({
   Octokit: jest.fn(),
 }));
 

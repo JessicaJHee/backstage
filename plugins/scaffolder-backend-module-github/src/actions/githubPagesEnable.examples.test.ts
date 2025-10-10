@@ -30,7 +30,7 @@ const mockOctokit = {
   request: jest.fn(),
 };
 
-jest.mock('@octokit/rest', () => ({
+jest.mock('octokit', () => ({
   Octokit: class {
     constructor() {
       return mockOctokit;

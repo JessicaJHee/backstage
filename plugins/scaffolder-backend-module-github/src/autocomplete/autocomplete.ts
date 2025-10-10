@@ -16,7 +16,9 @@
 
 import { InputError } from '@backstage/errors';
 import { getOctokitOptions } from '../util';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
 import { ScmIntegrationRegistry } from '@backstage/integration';
 
 export function createHandleAutocompleteRequest(options: {
@@ -37,7 +39,7 @@ export function createHandleAutocompleteRequest(options: {
       token,
       host: context.host ?? 'github.com',
     });
-    const client = new Octokit(octokitOptions);
+    const client = new octokit.Octokit(octokitOptions);
 
     switch (resource) {
       case 'repositoriesWithOwner': {
@@ -45,7 +47,9 @@ export function createHandleAutocompleteRequest(options: {
           client.rest.repos.listForAuthenticatedUser,
         );
 
-        const results = repositoriesWithOwner.map(r => ({ id: r.full_name }));
+        const results = repositoriesWithOwner.map((r: any) => ({
+          id: r.full_name,
+        }));
 
         return { results };
       }
@@ -60,7 +64,7 @@ export function createHandleAutocompleteRequest(options: {
           repo: context.repository,
         });
 
-        const results = branches.map(r => ({ id: r.name }));
+        const results = branches.map((r: any) => ({ id: r.name }));
 
         return { results };
       }

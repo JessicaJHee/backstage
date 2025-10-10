@@ -35,7 +35,7 @@ import { entityRefToName } from './gitHelpers';
 
 const publicKey = '2Sg8iYjAxxmI2LvUXpJjkYrMxURPc8r+dB7TJyvvcCU=';
 
-import { Octokit } from '@octokit/rest';
+import { Octokit } from 'octokit';
 
 const octokitMock = Octokit as unknown as jest.Mock;
 const mockOctokit = {
@@ -64,7 +64,7 @@ const mockOctokit = {
   },
   request: jest.fn(),
 };
-jest.mock('@octokit/rest', () => ({
+jest.mock('octokit', () => ({
   Octokit: jest.fn(),
 }));
 

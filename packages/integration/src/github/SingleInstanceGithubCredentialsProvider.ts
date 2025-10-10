@@ -17,13 +17,15 @@
 import parseGitUrl from 'git-url-parse';
 import { GithubAppConfig, GithubIntegrationConfig } from './config';
 import { createAppAuth } from '@octokit/auth-app';
-import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
+// const octokit = require('octokit') as typeof import('octokit');
 import { DateTime } from 'luxon';
 import {
   GithubCredentials,
   GithubCredentialsProvider,
   GithubCredentialType,
 } from './types';
+import { RestEndpointMethodTypes } from '@octokit/rest';
+import { Octokit } from 'octokit';
 
 type InstallationData = {
   installationId: number;
@@ -157,7 +159,9 @@ class GithubAppManager {
           installationClient.apps.listReposAccessibleToInstallation,
         );
 
-        repositoryNames = repositories.map(repository => repository.name);
+        repositoryNames = repositories.map(
+          (repository: { name: string }) => repository.name,
+        );
       }
       return {
         token: result.data.token,

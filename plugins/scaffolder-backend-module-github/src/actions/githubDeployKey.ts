@@ -21,7 +21,9 @@ import {
 } from '@backstage/plugin-scaffolder-node';
 import { ScmIntegrationRegistry } from '@backstage/integration';
 import { getOctokitOptions } from '../util';
-import { Octokit } from '@octokit/rest';
+
+const octokit = require('octokit') as typeof import('octokit');
+
 import Sodium from 'libsodium-wrappers';
 import { examples } from './githubDeployKey.examples';
 
@@ -109,7 +111,7 @@ export function createGithubDeployKeyAction(options: {
         repo,
       });
 
-      const client = new Octokit({
+      const client = new octokit.Octokit({
         ...octokitOptions,
         log: ctx.logger,
       });

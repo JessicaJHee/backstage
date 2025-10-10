@@ -60,7 +60,7 @@ const mockOctokit = {
   },
   request: jest.fn().mockResolvedValue({}),
 };
-jest.mock('@octokit/rest', () => ({
+jest.mock('octokit', () => ({
   Octokit: class {
     constructor() {
       return mockOctokit;
