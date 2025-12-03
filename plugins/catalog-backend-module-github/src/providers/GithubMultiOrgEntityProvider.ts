@@ -519,7 +519,13 @@ export class GithubMultiOrgEntityProvider implements EntityProvider {
 
     const userTransformer =
       this.options.userTransformer || defaultUserTransformer;
-    const { name, avatar_url: avatarUrl, email, login } = event.membership.user;
+    const {
+      name,
+      avatar_url: avatarUrl,
+      email,
+      login,
+      node_id,
+    } = event.membership.user;
     const org = event.organization.login;
     const { headers } =
       await this.options.githubCredentialsProvider.getCredentials({
@@ -561,6 +567,7 @@ export class GithubMultiOrgEntityProvider implements EntityProvider {
         avatarUrl,
         login,
         email: email ?? undefined,
+        id: node_id,
       },
       {
         org,
@@ -805,13 +812,14 @@ export class GithubMultiOrgEntityProvider implements EntityProvider {
 
     const userTransformer =
       this.options.userTransformer || defaultUserTransformer;
-    const { name, avatar_url: avatarUrl, email, login } = event.member;
+    const { name, avatar_url: avatarUrl, email, login, node_id } = event.member;
     const user = await userTransformer(
       {
         name,
         avatarUrl,
         login,
         email: email ?? undefined,
+        id: node_id,
       },
       {
         org,
