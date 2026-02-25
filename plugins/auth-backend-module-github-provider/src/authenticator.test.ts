@@ -157,4 +157,98 @@ describe('githubAuthenticator', () => {
       ),
     ).resolves.toBe(res);
   });
+
+  it('should handle GitHub SAML SSO session expiration (403 with x-github-sso header)', async () => {
+    // Simulate the error that GitHub returns when SAML SSO session expires
+    const samlSsoError = new Error('Request failed with status code 403');
+    (samlSsoError as any).oauthError = {
+      statusCode: 403,
+      data: {
+        message:
+          'Resource protected by organization SAML enforcement. You must grant your Personal Access token access to this organization.',
+        documentation_url:
+          'https://docs.github.com/articles/authenticating-to-a-github-organization-with-saml-single-sign-on/',
+      },
+    };
+    (samlSsoError as any).response = {
+      headers: {
+        'x-github-sso':
+          'required; url=https://github.com/orgs/test-org/sso?authorization_request=ABC123',
+      },
+    };
+
+    await expect(
+      githubAuthenticator.refresh(
+        {
+          refreshToken: 'access-token-v2.my-token',
+          req: {} as any,
+          scope: 'user:read',
+          scopeAlreadyGranted: true,
+        },
+        {
+          fetchProfile: async () => {
+            throw samlSsoError;
+          },
+        } as unknown as PassportOAuthAuthenticatorHelper,
+      ),
+    ).rejects.toMatchObject({
+      name: 'GitHubSamlSsoExpiredError',
+      message: expect.stringContaining('SAML SSO session has expired'),
+      ssoUrl:
+        'https://github.com/orgs/test-org/sso?authorization_request=ABC123',
+      statusCode: 403,
+    });
+  });
+
+  it('should handle 401 unauthorized error during refresh', async () => {
+    const unauthorizedError = new Error('Invalid access token');
+    (unauthorizedError as any).oauthError = {
+      statusCode: 401,
+    };
+
+    await expect(
+      githubAuthenticator.refresh(
+        {
+          refreshToken: 'access-token-v2.my-token',
+          req: {} as any,
+          scope: 'user:read',
+          scopeAlreadyGranted: true,
+        },
+        {
+          fetchProfile: async () => {
+            throw unauthorizedError;
+          },
+        } as unknown as PassportOAuthAuthenticatorHelper,
+      ),
+    ).rejects.toThrow('Invalid access token');
+  });
+
+  it('should handle regular 403 errors without x-github-sso header', async () => {
+    const regularForbiddenError = new Error('Access forbidden');
+    (regularForbiddenError as any).oauthError = {
+      statusCode: 403,
+      data: {
+        message: 'Resource not accessible',
+      },
+    };
+    (regularForbiddenError as any).response = {
+      headers: {},
+    };
+
+    await expect(
+      githubAuthenticator.refresh(
+        {
+          refreshToken: 'access-token-v2.my-token',
+          req: {} as any,
+          scope: 'user:read',
+          scopeAlreadyGranted: true,
+        },
+        {
+          fetchProfile: async () => {
+            throw regularForbiddenError;
+          },
+        } as unknown as PassportOAuthAuthenticatorHelper,
+      ),
+    ).rejects.toThrow('Access forbidden');
+  });
 });

@@ -63,6 +63,32 @@ export class RefreshingAuthSessionManager<T> implements SessionManager<T> {
     this.helper = new SessionScopeHelper({ sessionScopes, defaultScopes });
   }
 
+  /**
+   * Check if error is a GitHub SAML SSO expiration error and extract SSO URL.
+   * Returns the SSO URL if it's a SAML SSO error, undefined otherwise.
+   */
+  private async checkForSamlSsoError(error: any): Promise<string | undefined> {
+    if (!error?.response) {
+      return undefined;
+    }
+
+    try {
+      const errorBody = await error.response.json();
+      const errorDetails = errorBody?.error;
+
+      if (
+        errorDetails?.name === 'GitHubSamlSsoExpiredError' &&
+        errorDetails?.ssoUrl
+      ) {
+        return errorDetails.ssoUrl;
+      }
+    } catch {
+      // Failed to parse response, not a SAML SSO error, ignore
+    }
+
+    return undefined;
+  }
+
   async getSession(options: GetSessionOptions): Promise<T | undefined> {
     let alreadyTriedToRefreshSession = false;
     if (
@@ -86,6 +112,12 @@ export class RefreshingAuthSessionManager<T> implements SessionManager<T> {
         }
         return refreshedSession;
       } catch (error) {
+        const ssoUrl = await this.checkForSamlSsoError(error);
+        if (ssoUrl) {
+          window.location.href = ssoUrl;
+          throw new Error('Redirecting to GitHub SAML SSO re-authorization...');
+        }
+
         this.removeLocalSession();
 
         if (options.optional) {
@@ -109,7 +141,13 @@ export class RefreshingAuthSessionManager<T> implements SessionManager<T> {
         this.currentSession = newSession;
         // The session might not have the scopes requested so go back and check again
         return this.getSession(options);
-      } catch {
+      } catch (error) {
+        const ssoUrl = await this.checkForSamlSsoError(error);
+        if (ssoUrl) {
+          window.location.href = ssoUrl;
+          throw new Error('Redirecting to GitHub SAML SSO re-authorization...');
+        }
+
         this.removeLocalSession();
         // If the refresh attempt fails we assume we don't have a session, so continue to create one.
       }

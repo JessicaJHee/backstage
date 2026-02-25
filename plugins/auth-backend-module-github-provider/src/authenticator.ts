@@ -119,6 +119,25 @@ export const githubAuthenticator = createOAuthAuthenticator<
           if (error.oauthError?.statusCode === 401) {
             throw new Error('Invalid access token');
           }
+          // Handle SAML SSO session expiration for organizations with SSO enforcement
+          if (error.oauthError?.statusCode === 403) {
+            const ssoHeader = error.response?.headers?.['x-github-sso'];
+            if (ssoHeader) {
+              const urlMatch = ssoHeader.match(/url=([^;,\s]+)/);
+              const ssoUrl = urlMatch ? urlMatch[1] : null;
+
+              if (ssoUrl) {
+                const ssoError = new Error(
+                  'GitHub SAML SSO session has expired. Please re-authenticate to continue.',
+                );
+                (ssoError as any).name = 'GitHubSamlSsoExpiredError';
+                (ssoError as any).ssoUrl = ssoUrl;
+                (ssoError as any).statusCode = 403;
+                throw ssoError;
+              }
+            }
+          }
+
           throw error;
         });
 

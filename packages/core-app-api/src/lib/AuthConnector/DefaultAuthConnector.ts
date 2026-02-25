@@ -163,6 +163,7 @@ export class DefaultAuthConnector<AuthSession>
         `Auth refresh request failed, ${res.statusText}`,
       );
       error.status = res.status;
+      error.response = res.clone();
       throw error;
     }
 
